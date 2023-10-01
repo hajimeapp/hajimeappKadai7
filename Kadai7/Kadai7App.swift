@@ -9,6 +9,11 @@ import SwiftUI
 
 @main
 struct Kadai7App: App {
+    init() {
+        UITabBar.appearance().unselectedItemTintColor = .gray
+        UITabBar.appearance().backgroundColor = .white
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()

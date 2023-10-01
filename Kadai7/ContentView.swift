@@ -8,43 +8,43 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var upperNumber1 = ""
-    @State var lowerNumber1 = ""
-    @State var resultNumber1 = "Label"
-    @State var upperNumber2 = ""
-    @State var lowerNumber2 = ""
-    @State var resultNumber2 = "Label"
     @State var selectedTag = 1
-    init() {
-        UITabBar.appearance().unselectedItemTintColor = .gray
-        UITabBar.appearance().backgroundColor = .white
-    }
     
     var body: some View {
         TabView(selection: $selectedTag,
                 content:  {
-            AdditionCaluculatorView(upperNumber: $upperNumber1, lowerNumber: $lowerNumber1, resultNumber: $resultNumber1)
+            AdditionCaluculatorView()
                 .tabItem { Text("Item1") }.tag(1)
-            SubstructionCaluculatorView(upperNumber: $upperNumber2, lowerNumber: $lowerNumber2, resultNumber: $resultNumber2)
+            SubstructionCaluculatorView()
                 .tabItem { Text("Item2") }.tag(2)
         })
     }
 }
 
 struct AdditionCaluculatorView: View {
-    @Binding var upperNumber: String
-    @Binding var lowerNumber: String
-    @Binding var resultNumber: String
+    enum Field: Hashable {
+        case upper
+        case lower
+    }
+
+    @State var upperNumber = ""
+    @State var lowerNumber = ""
+    @State var resultNumber = "Label"
+
+    @FocusState var focus: Field?
+
     var body: some View {
         ZStack {
             Color.orange
                 .ignoresSafeArea()
             VStack {
                 TextFieldCustom(number: $upperNumber)
+                    .focused($focus, equals: Field.upper)
                 TextFieldCustom(number: $lowerNumber)
+                    .focused($focus, equals: Field.lower)
                 Button("Button") {
                     resultNumber = String((Int(upperNumber) ?? 0) + (Int(lowerNumber) ?? 0))
-                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    focus = nil
                 }
                 Text("\(resultNumber)")
                 Spacer()
@@ -54,19 +54,29 @@ struct AdditionCaluculatorView: View {
 }
 
 struct SubstructionCaluculatorView: View {
-    @Binding var upperNumber: String
-    @Binding var lowerNumber: String
-    @Binding var resultNumber: String
+    enum Field: Hashable {
+        case upper
+        case lower
+    }
+
+    @State var upperNumber = ""
+    @State var lowerNumber = ""
+    @State var resultNumber = "Label"
+
+    @FocusState var focus: Field?
+
     var body: some View {
         ZStack {
             Color.green
                 .ignoresSafeArea()
             VStack {
                 TextFieldCustom(number: $upperNumber)
+                    .focused($focus, equals: Field.upper)
                 TextFieldCustom(number: $lowerNumber)
+                    .focused($focus, equals: Field.lower)
                 Button("Button") {
                     resultNumber = String((Int(upperNumber) ?? 0) - (Int(lowerNumber) ?? 0))
-                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    focus = nil
                 }
                 Text("\(resultNumber)")
                 Spacer()
